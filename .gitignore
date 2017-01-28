@@ -1,0 +1,16 @@
+*.pyc
+.vagrant
+system/vm/mods/*
+pubring.gpg~
+pubring.kbx~
+secring.gpg
+terraform/.terraform
+terraform/terraform.pem
+terraform/terraform.tfstate.backup
+*.egg-info
+node_modules
+/system/vm/ecrdev.credentials
+secrets*.yml
+vm.retry
+env
+.idea
