@@ -1,4 +1,5 @@
 from pdf_util import convert_pdf_to_txt_as_pages
+import csv
 
 NEIGHBORHOODS_A = ['ARMATAGE',
     'AUDUBON PARK',
@@ -89,22 +90,60 @@ NEIGHBORHOODS_B = ['LOWRY HILL EAST',
 
 ALL_NEIGHBORHOODS = NEIGHBORHOODS_A + NEIGHBORHOODS_B
 
+CRIME_NAMES = ['total', 'homicide', 'rape', 'robbery', 'aggassault', 'burglary', 'larceny', 'autotheft', 'arson']
+
+
+def _remove_blanks(page_text):
+    lines = page_text.splitlines()
+    return filter(lambda x: x != '', lines)
+
 
 def mine_pdf(path):
-    pages_text = convert_pdf_to_txt_as_pages(path)
+    pages_text = convert_pdf_to_txt_as_pages(path, 2)
     assert len(pages_text) == 2
     crime_to_stat_map = {}
     neighborhoods = [NEIGHBORHOODS_A, NEIGHBORHOODS_B]
-    for i, page_text in enumerate(pages_text):
-        lines = page_text.splitlines()
-        blanks_removed = filter(lambda x: x != '', lines)
-        crime_names = blanks_removed[3].split()
-        neigh_a_idx = 4
-        for x, crime in enumerate(crime_names):
-            offset = x * len(neighborhoods[i]) + neigh_a_idx
-            for stat in blanks_removed[offset:len(neighborhoods[i]) + offset]:
-                if crime_to_stat_map.get(crime):
-                    crime_to_stat_map[crime].append(stat)
-                else:
-                    crime_to_stat_map[crime] = [stat]
+
+    blanks_removed = _remove_blanks(pages_text[0])
+
+    # Page 1 has the stats at index 4
+    neigh_a_idx = 4
+
+    for x, crime in enumerate(CRIME_NAMES):
+        offset = x * len(neighborhoods[0]) + neigh_a_idx
+        for stat in blanks_removed[offset:len(neighborhoods[0]) + offset]:
+            if crime_to_stat_map.get(crime):
+                crime_to_stat_map[crime].append(stat)
+            else:
+                crime_to_stat_map[crime] = [stat]
+
+    blanks_removed = _remove_blanks(pages_text[1])
+
+    # Page 2 has the stats at len(neighborhoods[1]) + neigh_a_idx + 1
+    neigh_a_idx = len(neighborhoods[1]) + neigh_a_idx + 1
+
+    for x, crime in enumerate(CRIME_NAMES):
+        offset = x * len(neighborhoods[1]) + neigh_a_idx
+        for stat in blanks_removed[offset:len(neighborhoods[1]) + offset]:
+            if crime_to_stat_map.get(crime):
+                crime_to_stat_map[crime].append(stat)
+            else:
+                crime_to_stat_map[crime] = [stat]
     return crime_to_stat_map
+
+
+def write_csv(source_path):
+    crime_map = mine_pdf(source_path)
+    dest_path = '{}.csv'.format('.'.join(source_path.split('.')[:-1]))
+    with open(dest_path, 'wb') as fd:
+        writer = csv.writer(fd, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        heading = ['neighborhood'] + CRIME_NAMES
+        writer.writerow(heading)
+        for i, hood in enumerate(ALL_NEIGHBORHOODS):
+            row_data = [hood]
+            for cn in CRIME_NAMES:
+                stats = crime_map[cn]
+                stat = stats[i]
+                row_data.append(stat)
+            writer.writerow(row_data)
+

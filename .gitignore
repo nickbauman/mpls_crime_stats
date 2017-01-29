@@ -14,3 +14,4 @@ secrets*.yml
 vm.retry
 env
 .idea
+.DS_Store

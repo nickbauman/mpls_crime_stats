@@ -5,26 +5,30 @@ from pdfminer.pdfpage import PDFPage
 from cStringIO import StringIO
 
 
-def convert_pdf_to_txt_as_pages(path):
+def convert_pdf_to_txt_as_pages(path, limit=None):
     """
     returns a list, in order, of all pages start to finish
     :param path: string path to your file, ymmv depending on where you launch from
     :return: list where each page is a string
     """
     codec = 'utf-8'
-    fp = file(path, 'rb')
     max_pgs = 0
     page_nos = set()
-
     text_pages = []
-    for page in PDFPage.get_pages(fp, page_nos, maxpages=max_pgs, password='', caching=True, check_extractable=True):
-        manager = PDFResourceManager()
-        page_channel = StringIO()
-        layout = LAParams()
-        device = TextConverter(manager, page_channel, codec=codec, laparams=layout)
-        interpreter = PDFPageInterpreter(manager, device)
-        interpreter.process_page(page)
-        text_pages.append(page_channel.getvalue())
+    index = 0
+    with open(path, 'rb') as fd:
+        for pg in PDFPage.get_pages(fd, page_nos, maxpages=max_pgs, password='', caching=True, check_extractable=True):
+            manager = PDFResourceManager()
+            page_channel = StringIO()
+            layout = LAParams()
+            device = TextConverter(manager, page_channel, codec=codec, laparams=layout)
+            interpreter = PDFPageInterpreter(manager, device)
+            interpreter.process_page(pg)
+            text_pages.append(page_channel.getvalue())
+            index += 1
+            if limit and limit == index:
+                break
+
     return text_pages
 
 
@@ -36,20 +40,17 @@ def convert_all_pdf_to_txt(path):
     """
     manager = PDFResourceManager()
     text_out = StringIO()
-    codec = 'utf-8'
     layout = LAParams()
-    device = TextConverter(manager, text_out, codec=codec, laparams=layout)
-    fp = file(path, 'rb')
+    device = TextConverter(manager, text_out, codec='utf-8', laparams=layout)
     interpreter = PDFPageInterpreter(manager, device)
     max_pgs = 0
     page_nos = set()
 
-    for page in PDFPage.get_pages(fp, page_nos, maxpages=max_pgs, password='', caching=True, check_extractable=True):
-        interpreter.process_page(page)
+    with open(path, 'rb') as fd:
+        for pg in PDFPage.get_pages(fd, page_nos, maxpages=max_pgs, password='', caching=True, check_extractable=True):
+            interpreter.process_page(pg)
+        text = text_out.getvalue()
+        text_out.close()
+        device.close()
 
-    text = text_out.getvalue()
-
-    fp.close()
-    device.close()
-    text_out.close()
     return text
