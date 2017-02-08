@@ -2,6 +2,18 @@
 
 This is an attempt to show some trends in Minneapolis-wide trends in crime by looking at the data.
 
+## Installation
+
+I prefer to use virtualenv and install packages that way.
+
+```
+virtualenv -p /usr/bin/python3 env;
+source env/bin/activate;
+pip install -r ./requirements.txt
+```
+
+pandas uses numpy which is HUGE so this will take some time.
+
 ## How it works
 
 ### Cleaning the Data
@@ -14,7 +26,7 @@ Much of the data here is pretty clean already. Except for 2012, which appears to
 TODO. Ultimately the most interesting data structure I can come up with looks like the following dict:
 
 ```
-year->month->neighborhood->crime->occurrence
+year->month->neighborhood->crime->occurrences
 ```
 
 Let's just call this the _Crime Stat Time Series_ (or *CSTS*) data format. Once we have all the data loaded into this
