@@ -5,17 +5,21 @@ import pandas as pd
 from stats_labels import ALL_NEIGHBORHOODS, CRIME_NAMES
 
 
-def create_csts_skeleton():
+def create_csts_skeleton(file_names):
+    yearsm = {}
+    for month_file in file_names:
+        year_str, _, _ = month_file.split('/')[-1].split('_')
+        yearsm[int(year_str)] = year_str
+    years = sorted(yearsm.keys())
     crime2stat = dict(zip(CRIME_NAMES, [NaN] * len(CRIME_NAMES)))
     hood2crime = dict(zip(ALL_NEIGHBORHOODS, [crime2stat] * len(ALL_NEIGHBORHOODS)))
     month2hood = dict(zip(range(1, 13), [hood2crime] * 12))
-    years = range(2000, 2018)
     return dict(zip(years, [month2hood] * len(years)))
 
 
 def loadm():
-    csts = create_csts_skeleton()
     xl_files = sorted(glob.glob('./data/20*.xlsx'))
+    csts = create_csts_skeleton(xl_files)
     for month_file in xl_files:
         print month_file
         print '=' * 20
