@@ -38,8 +38,10 @@ def loadm():
             crime = df.icol(xx).name.lower()
             if crime in CRIME_NAMES:
                 for i, hood in enumerate(hoods):
-                    stat = df.icol(xx).iloc[i]
+                    if isinstance(hood, float):
+                        continue
                     hood = hood.strip()
+                    stat = df.icol(xx).iloc[i]
                     if months_stats[month].get(hood):
                         months_stats[month][hood][crime] = stat
                     else:
@@ -47,5 +49,5 @@ def loadm():
                         if alt_hood and months_stats[month].get(alt_hood):
                             months_stats[month][alt_hood][crime] = stat
                         else:
-                            raise Exception("skipping: no '{}' in \n{}".format(hood, sorted(months_stats[month].keys())))
+                            print("skipping: no '{}' found in {}".format(hood, month_file))
     return csts
