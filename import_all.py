@@ -2,7 +2,7 @@ import glob
 from numpy import NaN
 import pandas as pd
 
-from stats_labels import ALL_NEIGHBORHOODS, CRIME_NAMES
+from stats_labels import ALL_NEIGHBORHOODS, CRIME_NAMES, UNIFIED_MAPPING
 
 
 def create_csts_skeleton(file_names):
@@ -38,10 +38,14 @@ def loadm():
             crime = df.icol(xx).name.lower()
             if crime in CRIME_NAMES:
                 for i, hood in enumerate(hoods):
-                    print hood
                     stat = df.icol(xx).iloc[i]
+                    hood = hood.strip()
                     if months_stats[month].get(hood):
                         months_stats[month][hood][crime] = stat
                     else:
-                        raise Exception("skipping: no '{}' in \n{}".format(hood, sorted(months_stats[month].keys())))
+                        alt_hood = UNIFIED_MAPPING.get(hood)
+                        if alt_hood and months_stats[month].get(alt_hood):
+                            months_stats[month][alt_hood][crime] = stat
+                        else:
+                            raise Exception("skipping: no '{}' in \n{}".format(hood, sorted(months_stats[month].keys())))
     return csts
