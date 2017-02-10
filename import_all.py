@@ -43,5 +43,5 @@ def loadm():
                     if months_stats[month].get(hood):
                         months_stats[month][hood][crime] = stat
                     else:
-                        print "skipping: no {} in \n{}".format(hood, months_stats[month])
+                        raise Exception("skipping: no '{}' in \n{}".format(hood, sorted(months_stats[month].keys())))
     return csts
