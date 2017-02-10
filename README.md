@@ -23,14 +23,34 @@ Much of the data here is pretty clean already. Except for 2012, which appears to
 
 ### Loading the data
 
-TODO. Ultimately the most interesting data structure I can come up with looks like the following dict:
+Ultimately the most interesting data structure I can come up with looks like the following dict:
 
 ```
 year->month->neighborhood->crime->occurrences
 ```
 
-Let's just call this the _Crime Stat Time Series_ (or *CSTS*) data format. Once we have all the data loaded into this
-format, things can get a lot more interesting.
+Let's just call this the _Crime Stat Time Series_ (or *CSTS*) data format. 
+
+To import all the data into RAM, from the root of the repo checked out, start an iPython session and do the following:
+
+```
+(env)$  mpls_crime_trends git:(master) ✗ ipython                      
+WARNING: Attempting to work in a virtualenv. If you encounter problems, please install IPython inside the virtualenv.
+Python 2.7.10 (default, Jul 14 2015, 19:46:27) 
+Type "copyright", "credits" or "license" for more information.
+
+IPython 1.1.0 -- An enhanced Interactive Python.
+?         -> Introduction and overview of IPython's features.
+%quickref -> Quick reference.
+help      -> Python's own help system.
+object?   -> Details about 'object', use 'object??' for extra details.
+
+In [1]: from import_all import loadm
+
+In [2]: g = loadm()
+```
+
+The variable `g` should contain the full CSTS formatted data in this example iPython session
 
 ### First Glance
 
