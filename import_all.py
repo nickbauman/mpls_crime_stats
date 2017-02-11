@@ -2,7 +2,7 @@ import glob
 from numpy import NaN
 import pandas as pd
 
-from stats_labels import ALL_NEIGHBORHOODS, CRIME_NAMES, UNIFIED_MAPPING
+from stats_labels import ALL_NEIGHBORHOODS, CRIME_NAMES, SPELLING_VARIATIONS
 
 
 def create_csts_skeleton(file_names):
@@ -18,7 +18,7 @@ def create_csts_skeleton(file_names):
 
 
 def loadm():
-    xl_files = sorted(glob.glob('./data/20*.xlsx'))
+    xl_files = sorted(glob.glob('./data/20*.xls*'))
     csts = create_csts_skeleton(xl_files)
     for month_file in xl_files:
         print month_file
@@ -40,12 +40,14 @@ def loadm():
                 for i, hood in enumerate(hoods):
                     if isinstance(hood, float):
                         continue
-                    hood = hood.strip()
+                    hood = hood.strip().upper()
                     stat = df.icol(xx).iloc[i]
                     if months_stats[month].get(hood):
+                        if not stat: # some stats zero = empty cell
+                            stat = 0
                         months_stats[month][hood][crime] = stat
                     else:
-                        alt_hood = UNIFIED_MAPPING.get(hood)
+                        alt_hood = SPELLING_VARIATIONS.get(hood)
                         if alt_hood and months_stats[month].get(alt_hood):
                             months_stats[month][alt_hood][crime] = stat
                         else:
