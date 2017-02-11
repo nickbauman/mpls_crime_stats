@@ -18,8 +18,17 @@ pandas uses numpy which is HUGE so this will take some time.
 
 ### Cleaning the Data
 
-Much of the data here is pretty clean already. Except for 2012, which appears to have the data only in the turd-format 
-(for data-mining at least) that is PDF. Hopefully that will be changed soon.
+All of 2012 and some random months going further back appears to have the data only in the turd-format (for data-mining 
+at least) that is PDF. Hopefully I will be able to convert this into xls. Also there are a lot of alternate spellings
+of metadata values in the city's files, indicating to me that these files were constructed by many different people and 
+the data therein probably passed through a number of people's hands. 
+
+All of which points to two things we can likely deduce:
+
+1. It is unlikely that the city has a proper *System of Record* for the information where all the data is in one place.
+2. The city has a "butcher shop" approach toward gathering this information. ("lots of meat wrapped in paper", i.e. humans 
+tallying numbers manually, re-keying them, frobnicating them and otherwise exposing the data to corruption) 
+3. Ultimately that the provenance of the data is likely not that great.
 
 ### Loading the data
 

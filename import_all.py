@@ -2,7 +2,7 @@ import glob
 from numpy import NaN
 import pandas as pd
 
-from stats_labels import ALL_NEIGHBORHOODS, CRIME_NAMES, SPELLING_VARIATIONS
+from stats_labels import ALL_NEIGHBORHOODS, CRIME_NAMES, HOOD_SPELLING_VARIATIONS
 
 
 def create_csts_skeleton(file_names):
@@ -21,9 +21,7 @@ def loadm():
     xl_files = sorted(glob.glob('./data/20*.xls*'))
     csts = create_csts_skeleton(xl_files)
     for month_file in xl_files:
-        print month_file
-        print '=' * 20
-        print ' ' * 20
+        print "loading", month_file
         year_str, month_str, _ = month_file.split('/')[-1].split('_')
         year = int(year_str)
         month = int(month_str)
@@ -47,9 +45,11 @@ def loadm():
                             stat = 0
                         months_stats[month][hood][crime] = stat
                     else:
-                        alt_hood = SPELLING_VARIATIONS.get(hood)
+                        alt_hood = HOOD_SPELLING_VARIATIONS.get(hood)
                         if alt_hood and months_stats[month].get(alt_hood):
                             months_stats[month][alt_hood][crime] = stat
                         else:
                             print("skipping: no '{}' found in {}".format(hood, month_file))
+        print '=' * 20
+        print ' ' * 20
     return csts
