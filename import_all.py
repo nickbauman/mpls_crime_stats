@@ -2,7 +2,7 @@ import glob
 from numpy import NaN
 import pandas as pd
 
-from stats_labels import ALL_NEIGHBORHOODS, CRIME_NAMES, HOOD_SPELLING_VARIATIONS
+from stats_labels import ALL_NEIGHBORHOODS, CRIME_NAMES, HOOD_SPELLING_VARIATIONS, CRIME_SPELLING_VARIATIONS
 
 
 def create_csts_skeleton(file_names):
@@ -20,6 +20,7 @@ def create_csts_skeleton(file_names):
 def loadm():
     xl_files = sorted(glob.glob('./data/20*.xls*'))
     csts = create_csts_skeleton(xl_files)
+    skipped_crime_stat = {}
     for month_file in xl_files:
         print "loading", month_file
         year_str, month_str, _ = month_file.split('/')[-1].split('_')
@@ -33,21 +34,22 @@ def loadm():
         y, x = df.shape
         hoods = df.icol(0)
         for xx in range(x):
-            crime = df.icol(xx).name.lower()
-            if crime in CRIME_NAMES:
+            local_crime = df.icol(xx).name.lower()
+            canonical_crime = CRIME_SPELLING_VARIATIONS.get(local_crime)
+            if canonical_crime:
                 for i, hood in enumerate(hoods):
                     if isinstance(hood, float):
                         continue
                     hood = hood.strip().upper()
                     stat = df.icol(xx).iloc[i]
                     if months_stats[month].get(hood):
-                        if not stat: # some stats zero = empty cell
+                        if not stat:  # some stats zero = empty cell
                             stat = 0
-                        months_stats[month][hood][crime] = stat
+                        months_stats[month][hood][canonical_crime] = stat
                     else:
                         alt_hood = HOOD_SPELLING_VARIATIONS.get(hood)
                         if alt_hood and months_stats[month].get(alt_hood):
-                            months_stats[month][alt_hood][crime] = stat
+                            months_stats[month][alt_hood][canonical_crime] = stat
                         else:
                             print("skipping: no '{}' found in {}".format(hood, month_file))
         print '=' * 20

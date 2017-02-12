@@ -118,3 +118,22 @@ HOOD_SPELLING_VARIATIONS = {'BRYN-MAWR': 'BRYN - MAWR',
 ALL_NEIGHBORHOODS = NEIGHBORHOODS_A + NEIGHBORHOODS_B
 
 CRIME_NAMES = ['total', 'homicide', 'rape', 'robbery', 'aggassault', 'burglary', 'larceny', 'autotheft', 'arson']
+
+CRIME_SPELLING_VARIATIONS = {'agg assault': 'aggassault',
+    'agg assaults': 'aggassault',
+    'aggassault': 'aggassault',
+    'aggassaults': 'aggassault',
+    'arson': 'arson',
+    'aslt': 'aggassault',
+    'auto theft': 'autotheft',
+    'autotheft': 'autotheft',
+    'burglary': 'burglary',
+    'hom': 'homicide',
+    'homcide': 'homicide',
+    'homicide': 'homicide',
+    'larceny': 'larceny',
+    'mvt': 'autotheft',
+    'rape': 'rape',
+    'rob': 'robbery',
+    'robbery': 'robbery',
+    'theft': 'larceny'}
