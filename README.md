@@ -1,6 +1,6 @@
 # Minneapolis Crime Trends
 
-This is an attempt to show some trends in Minneapolis-wide trends in crime by looking at the data.
+Explore trends in Minneapolis-wide crime stats.
 
 ## Installation
 
@@ -12,7 +12,7 @@ source env/bin/activate;
 pip install -r ./requirements.txt
 ```
 
-pandas uses numpy which is HUGE so this will take some time.
+pandas uses numpy which is HUGE so this will take some minutes.
 
 ## How it works
 
@@ -26,8 +26,8 @@ the data therein probably passed through a number of people's hands.
 All of which points to two things we can likely deduce:
 
 1. It is unlikely that the city has a proper *System of Record* for the information where all the data is in one place.
-2. The city has a "butcher shop" approach toward gathering this information. ("lots of meat wrapped in paper", i.e. humans 
-tallying numbers manually, re-keying them, frobnicating them and otherwise exposing the data to corruption) 
+2. The city has a "butcher shop" approach toward gathering this information. ("lots of meat wrapped in paper", i.e. 
+humans tallying numbers manually, re-keying them, frobnicating them and otherwise exposing the data to corruption) 
 3. Ultimately that the provenance of the data is likely not that great.
 
 ### Loading the data
@@ -74,4 +74,3 @@ do not get reported for a variety of reasons, some of them very surprising.
 
 The code you see here is Copyright Nick Bauman and is EPL licensed. The data is public and available on the Minneapolis
 city website. http://minneapolismn.gov/police/statistics/crime-statistics_codefor_statistics
-
