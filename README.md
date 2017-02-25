@@ -38,7 +38,7 @@ Ultimately the most interesting data structure I can come up with looks like the
 year->month->neighborhood->crime->occurrences
 ```
 
-Let's just call this the _Crime Stat Time Series_ (or *CSTS*) data format. 
+Let's just call this the _Crime Stat Monthly Time Series_ (or *CSMTS*) data format. 
 
 To import all the data into RAM, from the root of the repo checked out, start an iPython session and do the following:
 
@@ -60,6 +60,8 @@ In [2]: g = loadm()
 ```
 
 The variable `g` should contain the full CSTS formatted data in this example iPython session
+
+We wrote the data to the repo in `./data/csmts_06_16.json` which contains 10 years of CSMTS data.
 
 ### First Glance
 
